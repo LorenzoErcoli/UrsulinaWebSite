@@ -29,17 +29,24 @@ const placeWithSpacing = () => {
   const height = window.innerHeight;
   const placed = [];
   const minDistance = 140;
-  const maxTries = 50;
+  const maxTries = 80;
+  const quadrants = [
+    { minX: 0, maxX: 0.5, minY: 0, maxY: 0.5 },
+    { minX: 0.5, maxX: 1, minY: 0, maxY: 0.5 },
+    { minX: 0, maxX: 0.5, minY: 0.5, maxY: 1 },
+    { minX: 0.5, maxX: 1, minY: 0.5, maxY: 1 },
+  ];
 
   links.forEach((link) => {
     let x = padding;
     let y = padding;
     let tries = 0;
     let ok = false;
+    const zone = quadrants[placed.length % quadrants.length];
 
     while (!ok && tries < maxTries) {
-      const ratioX = Math.random();
-      const ratioY = Math.random();
+      const ratioX = zone.minX + Math.random() * (zone.maxX - zone.minX);
+      const ratioY = zone.minY + Math.random() * (zone.maxY - zone.minY);
       const maxX = Math.max(padding, width - link.offsetWidth - padding);
       const maxY = Math.max(padding, height - link.offsetHeight - padding);
       x = padding + ratioX * (maxX - padding);
