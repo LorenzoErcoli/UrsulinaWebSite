@@ -7,6 +7,17 @@ const panels = {
   bio: document.getElementById('panel-bio'),
 };
 
+const shuffle = (items) => {
+  const copy = [...items];
+
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+
+  return copy;
+};
+
 const getLayoutBounds = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -75,13 +86,14 @@ const placeWithSpacing = () => {
     { minX: 0, maxX: 0.5, minY: 0.5, maxY: 1 },
     { minX: 0.5, maxX: 1, minY: 0.5, maxY: 1 },
   ];
+  const zoneOrder = shuffle(quadrants);
 
   links.forEach((link) => {
     let x = padding;
     let y = padding;
     let tries = 0;
     let ok = false;
-    const zone = quadrants[placed.length % quadrants.length];
+    const zone = zoneOrder[placed.length % zoneOrder.length];
 
     while (!ok && tries < maxTries) {
       const ratioX = zone.minX + Math.random() * (zone.maxX - zone.minX);
